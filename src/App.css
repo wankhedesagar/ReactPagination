@@ -23,3 +23,23 @@
   cursor: pointer;
   margin: 8px;
 }
+
+.pagination {
+  padding: 10px;
+  margin: 15px;
+  display: flex;
+  justify-content: center;
+}
+.pagination > span {
+  padding: 15px 20px;
+  border: 1px solid grey;
+  cursor: pointer;
+}
+
+.pagination__selected {
+  background-color: rgb(220, 220, 220);
+}
+
+.pagination__disable {
+  opacity: 0;
+}
