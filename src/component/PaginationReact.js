@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 
 function PaginationReact() {
+  const [products, setProducts] = useState([]);
+
 
 
   const fetchProducts = async () => {
@@ -9,6 +11,11 @@ function PaginationReact() {
     );
     const data = await res.json();
     console.log(data);
+  }
+
+  if (data && data.products) {
+    setProducts(data.products);
+    setTotalPages(Math.ceil(data.total / 10));
   }
 
   useEffect(() => {
