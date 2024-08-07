@@ -15,7 +15,6 @@ function PaginationReact() {
 
   if (data && data.products) {
     setProducts(data.products);
-    setTotalPages(Math.ceil(data.total / 10));
   }
 
   useEffect(() => {
