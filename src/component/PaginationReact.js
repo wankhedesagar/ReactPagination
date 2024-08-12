@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from "react";
-import Sppiner from "./Sppiner";
 
 function PaginationReact() {
   const [products, setProducts] = useState([]);
   const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchProducts = async () => {
-      setLoading(true);
       const res = await fetch("https:dummyjson.com/products?limit=100");
       const data = await res.json();
-      setLoading(false);
       console.log(data);
       
       if (data && data.products) {
@@ -32,20 +28,16 @@ function PaginationReact() {
   };
 
   const previousClick = async () => {
-    setLoading(true);
     const res = await fetch("https:dummyjson.com/products?limit=100");
     const data = await res.json();
-    setLoading(true);
     if (data && data.products) {
       setPage(page - 1);
       setProducts(data.products);
     }
   };
   const nextClick = async () => {
-    setLoading(true);
     const res = await fetch("https:dummyjson.com/products?limit=100");
     const data = await res.json();
-    setLoading(true);
 
 
     if (data && data.products) {
@@ -58,7 +50,6 @@ function PaginationReact() {
 
   return (
     <React.Fragment>
-     {loading && <div><Sppiner/></div> }
       <div className="products">
         {products.slice(page * 10 - 10, page * 10).map((prod) => {
           return (
