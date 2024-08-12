@@ -1,67 +1,108 @@
 import React, { useEffect, useState } from "react";
+import Sppiner from "./Sppiner";
 
 function PaginationReact() {
   const [products, setProducts] = useState([]);
-  const [page,setPage] = useState(1);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
 
-  const fetchProducts = async () => {
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      const res = await fetch("https:dummyjson.com/products?limit=100");
+      const data = await res.json();
+      setLoading(false);
+      console.log(data);
+      
+      if (data && data.products) {
+        setProducts(data.products);
+        setPage(1)
+      }
+    };
+    fetchProducts()
+  }, []);
+
+  const selectPageHandler = (selectedPage) => {
+    if (
+      selectedPage >= 1 &&
+      selectedPage <= products.length / 10 &&
+      selectedPage !== page
+    )
+      setPage(selectedPage);
+  };
+
+  const previousClick = async () => {
+    setLoading(true);
     const res = await fetch("https:dummyjson.com/products?limit=100");
     const data = await res.json();
-    console.log(data);
-
+    setLoading(true);
     if (data && data.products) {
+      setPage(page - 1);
       setProducts(data.products);
     }
   };
+  const nextClick = async () => {
+    setLoading(true);
+    const res = await fetch("https:dummyjson.com/products?limit=100");
+    const data = await res.json();
+    setLoading(true);
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
+
+    if (data && data.products) {
+      setProducts(data.products);
+      setPage(page + 1);
+    }
+  };
 
 
-   const selectPageHandler = (selectedPage) => {
-     if (
-       selectedPage >= 1 &&
-       selectedPage <= products.length / 10 &&
-       selectedPage !== page
-     )
-       setPage(selectedPage);
-   };
 
   return (
-    <div>
-      {products.length > 0 && (
-        <div className="products">
-          {products.slice(page * 10 - 10, page * 10).map((prod) => {
-            return (
-              <span key={prod.id} className="products__single">
-                <img src={prod.thumbnail} alt={prod.title} />
-                <span>{prod.title}</span>
-              </span>
-            );
-          })}
-        </div>
-      )}
-      {products.length > 0 && (
-        <div className="pagination">
-          <span className={page > 1 ? "" : "pagination__disable"} onClick={() => selectPageHandler(page - 1)}>⬅️</span>
+    <React.Fragment>
+     {loading && <div><Sppiner/></div> }
+      <div className="products">
+        {products.slice(page * 10 - 10, page * 10).map((prod) => {
+          return (
+            <span key={prod.id} className="products__single">
+              <img src={prod.thumbnail} alt={prod.title} />
+              <h2>{prod.brand}</h2>
+              <span>{prod.category}</span>
+              <p>₹{prod.price}</p>
+              <p>₹{prod.rating}</p>
+            </span>
+          );
+        })}
+      </div>
 
-          {[...Array(products.length / 10)].map((_, i) => {
-            return (
-              <span
-                className={page === i + 1 ? "pagination__selected" : ""}
-                onClick={() => selectPageHandler(i + 1)}
-                key={i}
-              >
-                {i + 1}
-              </span>
-            );
-          })}
+      <div className="pagination">
+        {/* <span className={page > 1 ? "" : "pagination__disable"} onClick={() => selectPageHandler(page - 1)}>⬅️</span> */}
+        <button
+          className={page > 1 ? "" : "pagination__disable"}
+          onClick={previousClick}
+        >
+          ⬅️
+        </button>
 
-          <span className={page < products.length / 10 ? "" : "pagination__disable"} onClick={() => selectPageHandler(page + 1)}>➡️</span>
-        </div>
-      )}
-    </div>
+        {[...Array(products.length / 10)].map((_, i) => {
+          return (
+            <button
+              className={page === i + 1 ? "pagination__selected" : ""}
+              onClick={() => selectPageHandler(i + 1)}
+              key={i}
+            >
+              {i + 1}
+            </button>
+          );
+        })}
+
+        {/* <span className={page < products.length / 10 ? "" : "pagination__disable"} onClick={() => selectPageHandler(page + 1)}>➡️</span> */}
+        <button
+          className={page < products.length / 10 ? "" : "pagination__disable"}
+          onClick={nextClick}
+        >
+          ➡️
+        </button>
+      </div>
+    </React.Fragment>
   );
 }
 
