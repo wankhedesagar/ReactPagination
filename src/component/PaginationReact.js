@@ -9,13 +9,13 @@ function PaginationReact() {
       const res = await fetch("https:dummyjson.com/products?limit=100");
       const data = await res.json();
       console.log(data);
-      
+
       if (data && data.products) {
         setProducts(data.products);
-        setPage(1)
+        setPage(1);
       }
     };
-    fetchProducts()
+    fetchProducts();
   }, []);
 
   const selectPageHandler = (selectedPage) => {
@@ -39,14 +39,11 @@ function PaginationReact() {
     const res = await fetch("https:dummyjson.com/products?limit=100");
     const data = await res.json();
 
-
     if (data && data.products) {
       setProducts(data.products);
       setPage(page + 1);
     }
   };
-
-
 
   return (
     <React.Fragment>
@@ -54,11 +51,16 @@ function PaginationReact() {
         {products.slice(page * 10 - 10, page * 10).map((prod) => {
           return (
             <span key={prod.id} className="products__single">
-              <img src={prod.thumbnail} alt={prod.title} />
-              <h2>{prod.brand}</h2>
+             <img src={prod.thumbnail} alt={prod.title} />
+              <h2>{prod.title}</h2>
+              <h3>{prod.brand}</h3>
+              <div className="section">
               <span>{prod.category}</span>
               <p>₹{prod.price}</p>
-              <p>₹{prod.rating}</p>
+              <p>⭐{prod.rating}</p>
+              </div>
+             
+
             </span>
           );
         })}
